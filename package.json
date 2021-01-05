@@ -1,0 +1,18 @@
+{
+  "name": "signed_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ansicolor": "^1.1.71",
+    "ethereumjs-tx": "^1.3.3",
+    "ololog": "^1.1.84",
+    "web3": "^0.20.4"
+  }
+}

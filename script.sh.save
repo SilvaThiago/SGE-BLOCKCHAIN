@@ -1,0 +1,39 @@
+#!/bin/sh
+
+QTD_TEST=100
+
+
+# rm result_time
+# rm result_classify
+# rm clean_result
+rm -rd hw_info$1
+mkdir hw_info$1
+
+for counter in $(seq 1 $QTD_TEST); do
+	total=0;
+	for i in $(seq 1 10); do
+		node src/app.js > hw_info$1/temp_time;
+		total=$(echo $total+$(cat hw_info00/temp_time | grep Duracao | cut -d' ' -f 3) | bc )
+		echo $total;
+	done
+	nfo$1/result_time;
+	sleep 5
+done
+sed '/^Extracting/ d' < result_time > clean_result_time
+
+for counter in $(seq 1 $QTD_TEST); do
+	./get_gpu_temp.sh $counter $1 &
+	./get_gpu_usage.sh $counter $1 &
+	./get_cpu_temp.sh $counter $1 &
+	./get_cpu_usage.sh $counter $1 &
+	./get_mem_usage.sh $counter $1 &
+	node src/app.js;
+	$(ps -axf | grep "./get_gpu_temp.sh $counter $1" | grep -v grep | awk '{print "kill " $1}')
+	$(ps -axf | grep "./get_gpu_usage.sh $counter $1" | grep -v grep | awk '{print "kill " $1}')
+	$(ps -axf | grep "./get_cpu_temp.sh $counter $1" | grep -v grep | awk '{print "kill " $1}')
+	$(ps -axf | grep "./get_cpu_usage.sh $counter $1" | grep -v grep | awk '{print "kill " $1}')
+	$(ps -axf | grep "./get_mem_usage.sh $counter $1" | grep -v grep | awk '{print "kill " $1}')
+	sleep 5	
+done
+
+./get_hw_infos.sh $QTD_TEST $1
